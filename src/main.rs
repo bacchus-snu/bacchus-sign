@@ -155,7 +155,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if let Err(e) = run().await {
         error!("Main loop exited unsuccessfully: {}. Details: {:?}", e, e);
+        let errno = match &e {
+            Error::Io(e) => e.raw_os_error(),
+            Error::Systemd(_) => None,
+            Error::Keypair { error: e, .. } => e.raw_os_error(),
+            Error::ListenSocketNotFound => Some(2), // ENOENT
+        };
+        if let Some(e) = errno {
+            sd_notify(false, &[NotifyState::Errno(e as u8)])?;
+        }
+        sd_notify(false, &[NotifyState::Status(e.to_string())])?;
         std::process::exit(1);
     }
+
+    sd_notify(false, &[NotifyState::Status(String::from("Terminated"))])?;
     Ok(())
 }
