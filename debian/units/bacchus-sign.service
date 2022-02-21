@@ -1,0 +1,9 @@
+[Unit]
+Description=Bacchus signing service
+AssertFileNotEmpty=/etc/bacchus/keypair/tweetnacl
+
+[Service]
+Type=notify
+NotifyAccess=main
+NonBlocking=true
+ExecStart=/usr/bin/bacchus-sign /etc/bacchus/keypair/tweetnacl

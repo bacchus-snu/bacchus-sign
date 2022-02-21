@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+
+#DEBHELPER#
+
+mkdir -p /etc/bacchus/keypair
+if [[ ! -f /etc/bacchus/keypair/tweetnacl ]]; then
+  bacchus-sign-keys generate /etc/bacchus/keypair
+fi

@@ -1,0 +1,10 @@
+[Unit]
+Description=Bacchus signing service socket
+AssertFileNotEmpty=/etc/bacchus/keypair/tweetnacl
+
+[Socket]
+ListenStream=/run/bacchus-sign.sock
+Service=bacchus-sign.service
+
+[Install]
+WantedBy=multi-user.target

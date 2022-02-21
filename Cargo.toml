@@ -1,5 +1,6 @@
 [package]
 name = "bacchus-sign"
+description = "Pubkey signing agent for id.snucse.org"
 authors = ["Wonwoo Choi <vbchunguk@bacchus.snucse.org>"]
 license = "MIT"
 version = "0.1.0"
@@ -28,3 +29,13 @@ features = ["rt-multi-thread", "fs", "io-util", "net", "signal", "macros"]
 
 [profile.release]
 lto = true
+
+[package.metadata.deb]
+maintainer = "Bacchus <contact@bacchus.snucse.org>"
+depends = "libsystemd0"
+section = "misc"
+maintainer-scripts = "debian/scripts/"
+
+[package.metadata.deb.systemd-units]
+unit-scripts = "debian/units/"
+stop-on-upgrade = false
