@@ -27,9 +27,8 @@ async fn run() -> Result<(), Error> {
     use tokio::io::AsyncReadExt;
 
     let keypath: PathBuf = std::env::args_os()
-        .skip(1)
-        .next()
-        .unwrap_or(std::ffi::OsString::from("/etc/bacchus/keypair/tweetnacl"))
+        .nth(1)
+        .unwrap_or_else(|| std::ffi::OsString::from("/etc/bacchus/keypair/tweetnacl"))
         .into();
     let mut sigterm = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())?;
 
@@ -53,8 +52,7 @@ async fn run() -> Result<(), Error> {
     let fds = libsystemd::activation::receive_descriptors(true)?;
     let listen_fd = fds
         .into_iter()
-        .filter(|fd| fd.is_unix())
-        .next()
+        .find(|fd| fd.is_unix())
         .ok_or(Error::ListenSocketNotFound)?;
     let listen_fd = std::os::unix::io::IntoRawFd::into_raw_fd(listen_fd);
     // SAFETY: unix socket passed by systemd, envs are cleared
@@ -112,7 +110,7 @@ async fn run_connection_inner(
 
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::SystemTime::UNIX_EPOCH)
-        .unwrap_or(std::time::Duration::new(0, 0))
+        .unwrap_or_else(|_| std::time::Duration::new(0, 0))
         .as_secs()
         .to_string();
     info!("Message received, timestamp: {}", timestamp);
