@@ -9,19 +9,20 @@ edition = "2021"
 [dependencies]
 base64 = "0.13.0"
 env_logger = "0.9.0"
-libsystemd = "0.3.1"
+libsystemd = "0.5.0"
 log = "0.4.14"
-syslog = "5.0.0"
+syslog = "6.0.1"
 thiserror = "1.0.26"
 tweetnacl = "0.4.0"
+
+[dependencies.clap]
+version = "3.1.0"
+default-features = false
+features = ["std", "derive"]
 
 [dependencies.getrandom]
 version = "0.2.3"
 features = ["std"]
-
-[dependencies.structopt]
-version = "0.3.23"
-default-features = false
 
 [dependencies.tokio]
 version = "1.11.0"
@@ -29,10 +30,10 @@ features = ["rt-multi-thread", "fs", "io-util", "net", "signal", "macros"]
 
 [profile.release]
 lto = true
+debug = 1  # line information only
 
 [package.metadata.deb]
 maintainer = "Bacchus <contact@bacchus.snucse.org>"
-depends = "libsystemd0"
 section = "misc"
 maintainer-scripts = "debian/scripts/"
 

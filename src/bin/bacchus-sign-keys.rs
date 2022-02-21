@@ -5,29 +5,30 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 
-use structopt::StructOpt;
+use clap::Parser;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
+#[clap(version, about)]
 enum Command {
     Generate(GenerateOptions),
     Pubkey(PubkeyOptions),
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 /// Generate a keypair.
 struct GenerateOptions {
-    #[structopt(short = "f", long)]
+    #[clap(short = 'f', long)]
     /// Overwrite if keypair already exists
     overwrite: bool,
-    #[structopt(name = "PATH", default_value = "/etc/bacchus/keypair", parse(from_os_str))]
+    #[clap(name = "PATH", default_value = "/etc/bacchus/keypair")]
     /// Directory to write keypair into
     path: PathBuf,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 /// Print base64 encoded public key.
 struct PubkeyOptions {
-    #[structopt(name = "PATH", default_value = "/etc/bacchus/keypair", parse(from_os_str))]
+    #[clap(name = "PATH", default_value = "/etc/bacchus/keypair")]
     /// Directory to read public key from
     path: PathBuf,
 }
@@ -103,7 +104,7 @@ fn pubkey(options: PubkeyOptions) -> Result<(), Error> {
 fn main() {
     env_logger::init();
 
-    let command = Command::from_args();
+    let command = Command::parse();
     let result = match command {
         Command::Generate(opts) => generate(opts),
         Command::Pubkey(opts) => pubkey(opts),
