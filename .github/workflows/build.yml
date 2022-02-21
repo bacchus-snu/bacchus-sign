@@ -9,6 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Install dpkg-dev
+      run: sudo apt install dpkg-dev
     - name: Checkout
       uses: actions/checkout@v2
     - name: Setup cache
