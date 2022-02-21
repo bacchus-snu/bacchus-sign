@@ -21,8 +21,12 @@ jobs:
           ~/.cargo/registry/index/
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
+          ~/.cargo/.crates.toml
+          ~/.cargo/.crates2.json
           target/
-        key: ${{ runner.os }}-cargo-deb-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-cargo-2-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-2
     - name: Setup Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
