@@ -70,17 +70,17 @@ fn generate(options: GenerateOptions) -> Result<(), Error> {
     let mut secret_key = open_options.open(secret_key_path).map_err(Error::Keypair)?;
     let perms = std::os::unix::fs::PermissionsExt::from_mode(0o600);
     secret_key.set_permissions(perms)?;
+    secret_key.sync_all()?;
     secret_key.write_all(&sk)?;
     secret_key.flush()?;
-    secret_key.sync_all()?;
     drop(secret_key);
 
     let mut public_key = open_options.open(public_key_path).map_err(Error::Keypair)?;
     let perms = std::os::unix::fs::PermissionsExt::from_mode(0o644);
     public_key.set_permissions(perms)?;
+    public_key.sync_all()?;
     public_key.write_all(&pk)?;
     public_key.flush()?;
-    public_key.sync_all()?;
     drop(public_key);
 
     Ok(())
