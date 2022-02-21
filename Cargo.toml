@@ -3,7 +3,7 @@ name = "bacchus-sign"
 description = "Pubkey signing agent for id.snucse.org"
 authors = ["Wonwoo Choi <vbchunguk@bacchus.snucse.org>"]
 license = "MIT"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [dependencies]
